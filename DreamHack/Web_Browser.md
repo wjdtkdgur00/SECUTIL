@@ -4,9 +4,13 @@
 다음은 이용자가 주소창에 ```dreamhack.io```를 입력했을 때, 웹 브라우저가 하게 되는 기본적인 동작을 나열한 것입니다.
 ```
 1. 웹 브라우저의 주소창에 입력된 주소(dreamhack.io)를 해석 (URL 분석)
+
 2. dreamhack.io에 해당하는 주소 탐색 (DNS 요청)
+
 3. HTTP를 통해 dreamhack.io에 요청
+
 4. dreamhack.io의 HTTP 응답 수신
+
 5. 리소스 다운로드 및 웹 렌더링 (HTML, CSS, Javascript)
 ```
 # URL
