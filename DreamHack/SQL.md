@@ -32,4 +32,30 @@ DCL
 데이터베이스의 접근 권한 등의 설정을 하기 위한 언어입니다. 데이터베이스 내에 이용자의 권한을 부여하기 위한 GRANT와 권한을 박탈하는 REVOKE가 대표적입니다.
 ```
 # SQL Injection
-SQL은 DBMS에 데이터를 질의하는 언어입니다. 웹 서비스는 이용자의 입력을 SQL 구문에 포함해 요청하는 경우가 있습니다. 예를 들면,
+SQL은 DBMS에 데이터를 질의하는 언어입니다. 웹 서비스는 이용자의 입력을 SQL 구문에 포함해 요청하는 경우가 있습니다. 예를 들면, 로그인 시에 ID/PW를 포함하거나, 게시글의 제목과 내용을 SQL 구문에 포함합니다. **Figure2** 는 로그인 할 때 애플리케이션이 DBMS에 질의하는 예시 쿼리입니다.
+```SQL
+/*
+아래 쿼리 질의는 다음과 같은 의미를 가지고 있습니다.
+- SELECT: 조회 명령어
+- *: 테이블의 모든 컬럼 조회
+- FROM accounts: accounts 테이블 에서 데이터를 조회할 것이라고 지정
+- WHERE user_id='dreamhack' and user_pw='password': user_id 컬럼이 dreamhack이고, user_pw 컬럼이 password인 데이터로 범위 지정
+즉, 이를 해석하면 DBMS에 저장된 accounts 테이블에서 이용자의 아이디가 dreamhack이고, 비밀번호가 password인 데이터를 조회
+*/
+SELECT * FROM accounts WHERE user_id='dreamhack' and user_pw='password'
+```
+쿼리문을 살펴보면, 이용자가 입력한 "dreamhack"과 "password" 문자열을 SQL 구문에 포함하는 것을 확인할 수 있습니다. 이렇게 이용자가 SQL 구문에 임의 문자열을 삽입하는 행위를 **SQL Injection**이라고 합니다. SQL Injection이 발생하면 조작된 쿼리로 인증을 우회하거나, 데이터베이스의 정보를 유출할 수 있습니다.
+
+**Figure3**은 SQL Injection으로 조작한 쿼리문의 예시입니다. 
+```SQL
+/*
+아래 쿼리 질의는 다음과 같은 의미를 가지고 있습니다.
+- SELECT: 조회 명령어
+- *: 테이블의 모든 컬럼 조회
+- FROM accounts: accounts 테이블 에서 데이터를 조회할 것이라고 지정
+- WHERE user_id='admin': user_id 컬럼이 admin인 데이터로 범위 지정
+즉, 이를 해석하면 DBMS에 저장된 accounts 테이블에서 이용자의 아이디가 admin인 데이터를 조회
+*/
+SELECT * FROM accounts WHERE user_id='admin'
+```
+쿼리를 살펴보면, ```user_pw``` 조건문이 사라진 것을 확인할 수 있습니다. 조작한 쿼리를 통해 질의하면 DBMS는 ID가 admin인 계정의 비밀번호를 비교하지 않고 해당 계정의 정보를 반환하기 때문에 이용자는 admin 계정으로 로그인할 수 있습니다.
