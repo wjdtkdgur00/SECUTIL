@@ -59,3 +59,4 @@ SELECT * FROM accounts WHERE user_id='dreamhack' and user_pw='password'
 SELECT * FROM accounts WHERE user_id='admin'
 ```
 쿼리를 살펴보면, ```user_pw``` 조건문이 사라진 것을 확인할 수 있습니다. 조작한 쿼리를 통해 질의하면 DBMS는 ID가 admin인 계정의 비밀번호를 비교하지 않고 해당 계정의 정보를 반환하기 때문에 이용자는 admin 계정으로 로그인할 수 있습니다.
+# Simple SQL Injection
