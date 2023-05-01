@@ -5,25 +5,25 @@
 # 2021년 OWASP Top 10
 2021년 OWASP Top 10 목록은 다음과 같습니다.
 
-1. 인증 및 세션 관리 취약점 (Authentication and Session Management)
+1. Broken Access Control
 
-2. API 보안 취약점 (API Security)
+2. Cryptographic Failures
 
-3. 노출된 웹 서비스 (Exposed Web Services)
+3. Injection
 
-4. 취약한 접근 제어 (Access Control)
+4. Insecure Design
 
-5. 애플리케이션 보안 설정(Application Security Configurations)
+5. Security Misconfiguration
 
-6. 악성 파일 업로드 (Malicious File Upload)
+6. Vulnerable and Outdated Components
 
-7. 보안 헤더 설정 (Security Headers)
+7. Identification and Authentication Failures
 
-8. XXE (XML External Entities)
+8. Software and Data Intergrity Failures
 
-9. 신뢰할 수 없는 데이터 처리 (Improper Data Handling)
+9. Security Logging and Monitoring Failures
 
-10. OS 명령어 인젝션 (OS Command Injection)
+10. Server Side Request Forgery
 
 이러한 취약점들은 웹 애플리케이션에서 많이 발생하는 보안 위협으로, 이들 취약점을 예방하고 대응하기 위해서는 적극적인 보안 대책이 필요합니다. 따라서 OWASP Top 10은 웹 애플리케이션 보안을 위한 가이드 라인으로 활용될 수 있습니다.
 # XSS
